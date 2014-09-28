@@ -1,0 +1,3 @@
+#taskbar a.button-quarantine span.button-inner { background-image: url('media/quarantine.png'); background-position: 3px 0px; }
+#taskbar a.button-quarantine:hover span.button-inner,
+#taskbar a.button-quarantine.button-selected span.button-inner { background-position: 3px -24px }

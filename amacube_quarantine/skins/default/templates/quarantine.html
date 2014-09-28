@@ -1,0 +1,112 @@
+<roundcube:object name="doctype" value="html5" />
+<html>
+  <head>
+    <title><roundcube:object name="pagetitle" /></title>
+    <roundcube:include file="/includes/links.html" />
+  </head>
+  <body class="noscroll">
+    <roundcube:include file="/includes/header.html" />
+  
+    <div id="mainscreen" class="offset">
+      <div id="quicksearchbar" class="" style='top: -40px;'>
+        <form name="rcmqsearchform" onsubmit="rcmail.command('plugin.request_search'); return false" style="display:inline" action="./?_task=quarantine" method="get">
+          <input name="_q" id="quicksearchbox" type="text">
+        </form>
+        
+        <a id="searchmenulink" class="iconbutton searchoptions" onclick="UI.show_popup('searchmenu');return false" title="Search modifiers" href="#"> </a>
+        <a id="searchreset" class="iconbutton reset" title="Reset search" href="#" onclick="rcmail.command('plugin.request_search_reset');"> </a>
+      </div>
+      
+      <div id="pluginbody" class="uibox contentbox">
+        <roundcube:object name="plugin.body" />
+      
+        <div class="uibox amacube" id="mailview-top">
+          <div class="boxlistcontent" id="messagelistcontainer">
+            <div id="messagelist" class="loading">
+              <table class="records-table messagelist sortheader fixedheader fixedcopy" style="position: fixed;">
+                <thead>
+                  <tr>
+                    <td class="ac_from">
+                      <a class="ac_sort_none" href="#" id="sort_by_sender" onclick="rcmail.command('plugin.request_sort_by', this);" >From</a>
+                    </td>
+                    <td class="ac_subject">
+                      <a class="ac_sort_none" href="#" id="sort_by_subject" onclick="rcmail.command('plugin.request_sort_by', this);" >Subject</a>
+                    </td>
+                    <td class="ac_date">
+                      <a class="ac_sort_desc" href="#" id="sort_by_date" onclick="rcmail.command('plugin.request_sort_by', this);" >Date</a>
+                    </td>
+                    <td class="ac_type">
+                      <a class="ac_sort_none" href="#" id="sort_by_type" onclick="rcmail.command('plugin.request_sort_by', this);" >Type</a>
+                    </td>
+                    <td class="ac_score">
+                      <a class="ac_sort_none" href="#" id="sort_by_score" onclick="rcmail.command('plugin.request_sort_by', this);" >Score</a>
+                    </td>
+                    <td class="ac_action">&nbsp;</td>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+              <table class="records-table messagelist sortheader fixedheader" id="messagelist">
+                <thead>
+                  <tr>
+                    <td class="ac_from">
+                      <a class="ac_sort_none" href="#">From</a>
+                    </td>
+                    <td class="ac_subject">
+                      <a class="ac_sort_none" href="#">Subject</a>
+                    </td>
+                    <td class="ac_date">
+                      <a class="ac_sort_asc" href="#">Date</a>
+                    </td>
+                    <td class="ac_type">
+                      <a class="ac_sort_none" href="#">Type</a>
+                    </td>
+                    <td class="ac_score">
+                      <a class="ac_sort_none" href="#">Score</a>
+                    </td>
+                    <td class="ac_action">&nbsp;</td>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div id="messagelistfooter">
+                <div class="pagenav dark" id="countcontrols">
+                  <span class="countdisplay" id="rcmcountdisplay">Messages 1 to 1 of 1</span>
+                  <span class="pagenavbuttons">
+                    <a class="button firstpage disabled" id="page_first" onclick="rcmail.command('plugin.request_pagination', this);" title="Show first page" ><span class="inner">|&lt;</span></a>
+                    <a class="button prevpage disabled" id="page_prev" onclick="rcmail.command('plugin.request_pagination', this);" title="Show previous page" ><span class="inner">|&lt;</span></a>
+                    <a class="button nextpage disabled" id="page_next" onclick="rcmail.command('plugin.request_pagination', this);" title="Show next page" ><span class="inner">|&lt;</span></a>
+                    <a class="button lastpage disabled" id="page_last" onclick="rcmail.command('plugin.request_pagination', this);" title="Show last page" ><span class="inner">|&lt;</span></a>
+                  </span>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div id="searchmenu" class="popupmenu">
+      <ul class="toolbarmenu">
+        <li><label>
+          <input type="checkbox" name="s_mods[]" value="from" id="search_filter_by_sender" onclick="rcmail.command('plugin.request_search_filter', this);" />
+          <span><roundcube:label name="from" /></span>
+        </label></li>
+        <li><label>
+          <input type="checkbox" name="s_mods[]" value="subject" id="search_filter_by_subject" onclick="rcmail.command('plugin.request_search_filter', this);" />
+          <span><roundcube:label name="subject" /></span>
+        </label></li>
+        
+        <li><label>
+          <input type="checkbox" name="s_mods[]" value="body" id="search_filter_by_body" onclick="rcmail.command('plugin.request_search_filter', this);" />
+          <span><roundcube:label name="body" /></span>
+        </label></li>
+      </ul>
+    </div>
+    
+    <roundcube:object name="plugin.footer" />
+    <roundcube:include file="/includes/footer.html" />
+  </body>
+</html>

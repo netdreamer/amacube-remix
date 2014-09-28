@@ -1,0 +1,24 @@
+div#pluginbody div.wblist_form { float: left; overflow: hidden; width: 40%; }
+div#pluginbody div.wblist_list { float: left; overflow: hidden; width: 60%; }
+
+div#pluginbody div.uibox { margin: 34px 12px 0px 12px; }
+
+div.uibox.amacube { position: relative; top: 0; bottom: 0; min-height: 200px;}
+
+div.amacube table { width: 100%; }
+div.amacube table thead tr td.ac_priority { padding-left: 0px; text-align: left; }
+div.amacube table td.ac_priority { text-align: center; width: 50px; }
+div.amacube table td.ac_sender { width: 200px; }
+div.amacube table td.ac_policy { width: 100px; }
+div.amacube table td.ac_action { width: 30px; }
+div.amacube table td.ac_action img { cursor: pointer; height: 20px; padding: 0px 6px; width: 20px; }
+
+div.amacube div#messagelistcontainer { bottom: 0; overflow: hidden; position: absolute; top: 0; width: 100%; }
+div.amacube div#messagelist{ bottom: 0; left: 0; overflow-x: hidden; overflow-y: scroll; position: absolute; right: 0; top: 0; }
+
+.ac_sort_none { background: inherit; }
+.ac_sort_asc { background-image: url('/skins/larry/images/listicons.png'); background-size: auto; background-position: 100% -944px; background-repeat: no-repeat; }
+.ac_sort_desc { background-image: url('/skins/larry/images/listicons.png'); background-size: auto; background-position: 100% -912px; background-repeat: no-repeat; }
+
+.wblist_instruction { padding: 0px 12px; }
+.loading { background-image: url('/plugins/amacube_wblist/media/spinner.gif'); background-position:  center; background-repeat:  no-repeat; }
