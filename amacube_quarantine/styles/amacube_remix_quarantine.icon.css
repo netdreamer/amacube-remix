@@ -1,0 +1,14 @@
+/**
+* This file is part of the Amacube-Remix_Quarantine Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
+* 
+* A Roundcube plugin to let users release quarantined mail (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* 
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
+*/
+
+#taskbar a.button-quarantine span.button-inner { background-image: url('../media/quarantine.png'); background-position: 3px 0px; }
+#taskbar a.button-quarantine:hover span.button-inner,
+#taskbar a.button-quarantine.button-selected span.button-inner { background-position: 3px -24px }

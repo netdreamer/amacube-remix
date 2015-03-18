@@ -1,13 +1,62 @@
 <?php
+/**
+* This file is part of the Amacube-Remix_Policy Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
+* 
+* A Roundcube plugin to let users change their amavis policy settings (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* 
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
+*/
 
-// The database connection settings where amavis stores settings and emails
-// see mysql.schema for more details.
-$rcmail_config['amacube_db_dsn'] = 'mysql://<MYSQL-USER>:<MYSQL-PASSWORD>@<MYSQL-HOST>/<MYSQL-DATABASE>';
+# The database connection settings where amavis stores settings and emails
+$rcmail_config['amacube_remix_db_dsn'] = 'mysql://<MYSQL-USER>:<MYSQL-PASSWORD>@<MYSQL-HOST>/<MYSQL-DATABASE>';
 
-// for release of quarantined emails, amavis must be set up to accept socket connections
-// from the host where roundcube is running on. see README.md for more details.
-// Enter hostname and port of the amavis process:
-$rcmail_config['amacube_amavis_host'] = 'AMAVIS_HOST';
-$rcmail_config['amacube_amavis_port'] = 'AMAVIS_PORT';
-
+# Default Initial Policy Settings.
+$rcmail_config['amacube_remix_default_policy'] = array(
+  'virus_lover' => false,                 // bool {N/Y}
+  'spam_lover' => false,                  // bool {N/Y}
+  'unchecked_lover' => false,             // bool {N/Y}
+  'banned_files_lover' => false,          // bool {N/Y}
+  'bad_header_lover' => false,            // bool {N/Y}
+  'bypass_virus_checks' => false,         // bool {N/Y}
+  'bypass_spam_checks' => false,          // bool {N/Y}
+  'bypass_banned_checks' => false,        // bool {N/Y}
+  'bypass_header_checks' => false,        // bool {N/Y}
+  'virus_quarantine_to' => true,          // string {''/'sql:'}
+  'spam_quarantine_to' => true,           // string {''/'sql:'}
+  'banned_quarantine_to' => true,         // string {''/'sql:'}
+  'unchecked_quarantine_to' => true,      // string {''/'sql:'}
+  'bad_header_quarantine_to' => true,     // string {''/'sql:'}
+  'clean_quarantine_to' => false,         // string {''/'sql:'}
+  'archive_quarantine_to' => false,       // string {''/'sql:'}
+  'spam_tag_level' => -999,               // float
+  'spam_tag2_level' => 2.3,               // float
+  'spam_tag3_level' => 2.3,               // float
+  'spam_kill_level' => 6,                 // float
+  'spam_dsn_cutoff_level' => 6,           // float
+  'spam_quarantine_cutoff_level' => 999,  // float
+  'addr_extension_virus' => NULL,         // unused
+  'addr_extension_spam' => NULL,          // unused
+  'addr_extension_banned' => NULL,        // unused
+  'addr_extension_bad_header' => NULL,    // unused
+  'warnvirusrecip' => NULL,               // unused
+  'warnbannedrecip' => NULL,              // unused
+  'warnbadhrecip' => NULL,                // unused
+  'newvirus_admin' => NULL,               // unused
+  'virus_admin' => NULL,                  // unused
+  'banned_admin' => NULL,                 // unused
+  'bad_header_admin' => NULL,             // unused
+  'spam_admin' => NULL,                   // unused
+  'spam_subject_tag' => NULL,             // unused
+  'spam_subject_tag2' => NULL,            // unused
+  'spam_subject_tag3' => NULL,            // unused
+  'message_size_limit' => NULL,           // unused
+  'banned_rulenames' => NULL,             // unused
+  'disclaimer_options' => NULL,           // unused
+  'forward_method' => NULL,               // unused
+  'sa_userconf' => NULL,                  // unused
+  'sa_username' => NULL                   // unused
+  );
 ?>

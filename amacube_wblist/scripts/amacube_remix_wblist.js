@@ -1,13 +1,16 @@
-/*
-This file is part of the amacube Roundcube plugin
-Copyright (C) 2013, Alexander Köb
-
-Licensed under the GNU General Public License version 3. 
-See the COPYING file for a full license statement.          
-
+/**
+* This file is part of the Amacube-Remix_WBList Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
+* 
+* A Roundcube plugin to let users manage whitelist/blacklist (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* 
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
 */
+
 var settings = { sort_by: 'priority',
-								 sort_order: 'ASC',
+								 sort_order: 'DESC',
 							 };
 						
 $( document ).ready(function() {
@@ -73,9 +76,9 @@ function request_initialize() {
 }
 
 function request_add_entry() {
-	var wblist_priority = $( 'form#amacube_wblist_form input[name=_wblist_priority]' ).val();
-	var wblist_policy = $( 'form#amacube_wblist_form select[name=_wblist_policy] option:selected' ).val();
-	var wblist_address = $( 'form#amacube_wblist_form input[name=_wblist_address]' ).val();
+	var wblist_priority = $( 'form#amacube_remix_wblist_form input[name=_wblist_priority]' ).val();
+	var wblist_policy = $( 'form#amacube_remix_wblist_form select[name=_wblist_policy] option:selected' ).val();
+	var wblist_address = $( 'form#amacube_remix_wblist_form input[name=_wblist_address]' ).val();
 	
 	set_wblist_loading_state();
 	rcmail.http_post( 'plugin.request_ajax', { action: 'add_entry', settings: settings, address: wblist_address, priority: wblist_priority, policy: wblist_policy } );
@@ -137,8 +140,8 @@ function response_wblist( response ) {
 		set_wblist_loaded_state( response.raw );
 		
 		// Reset Form Fields
-		$( 'form#amacube_wblist_form input[name=_wblist_priority]' ).val( '' );
-		$( 'form#amacube_wblist_form input[name=_wblist_address]' ).val( '' );
-		$( 'form#amacube_wblist_form select[name=_wblist_policy] option:selected' ).removeAttr( 'selected' );
+		$( 'form#amacube_remix_wblist_form input[name=_wblist_priority]' ).val( '' );
+		$( 'form#amacube_remix_wblist_form input[name=_wblist_address]' ).val( '' );
+		$( 'form#amacube_remix_wblist_form select[name=_wblist_policy] option:selected' ).removeAttr( 'selected' );
 	}
 }

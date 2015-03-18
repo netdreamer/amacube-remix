@@ -1,0 +1,20 @@
+/**
+* This file is part of the Amacube-Remix_Policy Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
+* 
+* A Roundcube plugin to let users change their amavis policy settings (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* 
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
+*/
+
+.ui-slider { background: green; }
+.ui-slider-range { background: #bfa911 !important; }
+
+div#spam_slider { height: 10px; margin-bottom: 10px; width: 300px; }
+div#spam_slider_upper_range { background: #ac4040; float: right; height: 100%; border-radius: 0 4px 4px 0; }
+
+span.spam_score { font-size: 14px; font-weight: bold; }
+span.spam_score_junk { color: #bfa911; }
+span.spam_score_quarantine { color: #ac4040; }

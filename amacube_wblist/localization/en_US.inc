@@ -1,20 +1,20 @@
 <?php
-/*
-Language File for amacube
-
-This file is part of the amacube Roundcube plugin
-Copyright (C) 2013, Alexander Köb <nerdkram@koeb.me>
-
-Licensed under the GNU General Public License version 3. 
-See the COPYING file for a full license statement.          
-
+/**
+* This file is part of the Amacube-Remix_WBList Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
+* 
+* A Roundcube plugin to let users manage whitelist/blacklist (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* 
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
 */
+
 $labels = array();
 $labels['page_title'] = 'Amavis WBlist';
 $labels['menu_button'] = 'Amavis WBlist';
 $labels['box_title'] = 'Amavis White / Black List';
 $labels['no_entries'] = 'No Entries in WBlist policy';
-
 $labels['section_wblist_add'] = 'Add Entry';
 
 $messages = array();

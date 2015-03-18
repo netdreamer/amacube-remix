@@ -17,7 +17,7 @@
 <div id="pluginbody" class="uibox contentbox">
 	<roundcube:object name="plugin.body" />
 	<div class="wblist_form">
-		<form class="propform boxcontent" id="amacube_wblist_form" name="amacube_wblist_form" method="post" action="#">
+		<form class="propform boxcontent" id="amacube_remix_wblist_form" name="amacube_remix_wblist_form" method="post" action="#">
 			<fieldset>
 				<legend>Add Entry</legend>
 				<table class="propform" cols="2">
@@ -59,8 +59,8 @@
 		<div class="wblist_instruction" >
 			<p>You may define rules that will accept or reject email from certain senders or domain.  These rules are evaluted in order based on priority, and then by most specific match.  Once a Rule is matched, no further rules are evaluated.  It is important to consider the order of evaluation when creating rules.</p>
 			<p>Example: Deny all email from example.org except for email sent by Bob (2 rules):<br />
-			(Rule 1) Priority: 6, Sender: Bob@example.org, Policy: Whitelist<br />
-			(Rule 2) Priority: 7, Sender: @example.org, Policy: Blacklist</p>
+			(Rule 1) Priority: 7, Sender: @example.org, Policy: Blacklist<br />
+			(Rule 2) Priority: 8, Sender: Bob@example.org, Policy: Whitelist</p>
 		</div>
 	</div>
 	
@@ -72,7 +72,7 @@
 						<thead>
 							<tr>
 								<td class="ac_priority">
-									<a class="ac_sort_asc" href="#" id="sort_by_priority" onclick="rcmail.command('plugin.request_sort_by', this);" >Priority</a>
+									<a class="ac_sort_desc" href="#" id="sort_by_priority" onclick="rcmail.command('plugin.request_sort_by', this);" >Priority</a>
 								</td>
 								<td class="ac_sender">
 									<a class="ac_sort_none" href="#" id="sort_by_sender" onclick="rcmail.command('plugin.request_sort_by', this);" >Sender / Domain</a>

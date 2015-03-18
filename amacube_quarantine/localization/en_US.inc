@@ -1,13 +1,13 @@
 <?php
-/*
-Language File for amacube
-
-This file is part of the amacube Roundcube plugin suite
-Copyright (C) 2013, Alexander Köb <nerdkram@koeb.me>
-
-Licensed under the GNU General Public License version 3. 
-See the COPYING file for a full license statement.          
-
+/**
+* This file is part of the Amacube-Remix_Quarantine Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
+* 
+* A Roundcube plugin to let users release quarantined mail (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* 
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
 */
 
 $labels = array();
@@ -16,12 +16,6 @@ $labels['header_from'] = 'From';
 $labels['header_subject'] = 'Subject';
 $labels['header_type'] = 'Type';
 $labels['header_score'] = 'Score';
-
-
-
-
-
-
 $labels['content_decode_B'] = 'Banned Content';
 $labels['content_decode_C'] = 'Clean';
 $labels['content_decode_H'] = 'Bad Header';

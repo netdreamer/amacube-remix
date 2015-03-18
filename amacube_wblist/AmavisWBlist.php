@@ -1,24 +1,60 @@
 <?php
 /**
-* AmavisPolicy - class to load and store Amavis settings in DB
+* This file is part of the Amacube-Remix_WBList Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
+* 
+* A Roundcube plugin to let users manage whitelist/blacklist (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* 
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
 */
 
-/*
-This file is part of the amacube Roundcube plugin
-Copyright (C) 2013, Alexander Köb <nerdkram@koeb.me>
-
-Licensed under the GNU General Public License version 3. 
-See the COPYING file for a full license statement.          
-
-*/
-include_once('AmavisAbstract.php');
-class AmavisWBlist extends AmavisAbstract
+class AmavisWBlist
 {
-  // USER SETTINGS
-  private $user_id = ''; // Mapping of User's email address to id in amavisd database, users table
+	# Database Settings
+	private   $db_config;
+  protected $db_conn;
+  
+  # User Settings
+  private $user_id = '';
+	protected $user_email = '';
 	
 	function __construct( $db_config ) {
-    parent::__construct( $db_config );
+    $this->db_config = $db_config;
+		
+		# Fetch Username
+    $rcmail = rcmail::get_instance();
+    $this->user_email = $rcmail->user->data['username'];
+  }
+	
+	function init_db() {
+    # Initialize Database Factory
+    if ( !$this->db_conn ) {
+      if ( !class_exists( 'rcube_db' ) ) // pre 0.9
+        $this->db_conn = new rcube_mdb2( $this->db_config, '', TRUE );
+      else // ver 0.9+
+        $this->db_conn = rcube_db::factory( $this->db_config, '', TRUE );
+    }
+    
+    # Connect to the Database
+    $this->db_conn->db_connect('w');
+
+    # Check DB connections and exit on failure
+    if ( $err_str = $this->db_conn->is_error() ) {
+      raise_error( array(
+        'code' => 603,
+        'type' => 'db',
+        'message' => $err_str ), true, true );
+    }
+  }
+
+  function db_error() {
+    # Return the last database error message
+    if( $this->db_conn && $this->db_conn->is_error() )
+      return $this->db_conn->is_error();
+      
+    return false;
   }
 	
 	function fetch_user_id() {

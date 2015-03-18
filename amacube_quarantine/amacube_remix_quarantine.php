@@ -1,35 +1,18 @@
 <?php
 /**
-*  Amacube_Remix
+* This file is part of the Amacube-Remix_Quarantine Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
 * 
-* A Roundcube plugin to let users change their amavis settings (which must be stored
-* in a database) based on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* A Roundcube plugin to let users release quarantined mail (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
 * 
-* @version 0.1
-* @author Tony VanGerpen
-* @url https://github.com/akoeb/amacube
-*
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
 */
 
-/*
-This file is part of the amacube_remix Roundcube plugin
-Copyright (C) 2014, Tony VanGerpen
-
-Licensed under the GNU General Public License version 3. 
-See the COPYING file for a full license statement.          
-
-*/
-/*
-// DEBUG
-error_reporting(E_ALL);
-ini_set('display_errors', 'Off');
-ini_set("log_errors", 1);
-ini_set("error_log", "/var/www/roundcube/plugins/amacube/roundcube-error.log");
-*/
-class amacube_quarantine extends rcube_plugin
+class amacube_remix_quarantine extends rcube_plugin
 {
   private $rcmail;
-  //private $storage;
   private $quarantine;
   
   function init() {
@@ -57,7 +40,7 @@ class amacube_quarantine extends rcube_plugin
   
   function register_icon() {
     # Load Icon Stylesheet
-    $this->include_stylesheet( 'amacube_quarantine_icon.css' );
+    $this->include_stylesheet( 'styles/amacube_remix_quarantine.icon.css' );
     
     # Add Quarantine Icon to the Taskbar
     $this->add_button( array(
@@ -66,7 +49,7 @@ class amacube_quarantine extends rcube_plugin
       'classsel'   => 'button-quarantine button-selected',
       'innerclass' => 'button-inner',
       'label'      => 'quarantine',
-      'domain'     => 'amacube_quarantine'
+      'domain'     => 'amacube_remix_quarantine'
     ), 'taskbar' );
   }
   
@@ -74,8 +57,8 @@ class amacube_quarantine extends rcube_plugin
     $this->load_config();
     
     # UI Includes
-    $this->include_script( 'amacube_quarantine.js' );
-    $this->include_stylesheet( 'amacube_quarantine.css' );
+    $this->include_script( 'scripts/amacube_remix_quarantine.js' );
+    $this->include_stylesheet( 'styles/amacube_remix_quarantine.css' );
   }
   
   // Ajax Request Director
@@ -102,7 +85,7 @@ class amacube_quarantine extends rcube_plugin
    */
   function event_init() {
     $this->rcmail->output->set_pagetitle( $this->gettext( 'quarantine_pagetitle' ) );
-    $this->rcmail->output->send( 'amacube_quarantine.quarantine' ); // Template to Send
+    $this->rcmail->output->send( 'amacube_remix_quarantine.quarantine' ); // Template to Send
   }
   
   function event_refresh() {
@@ -143,9 +126,9 @@ class amacube_quarantine extends rcube_plugin
     
     # Initialize Quarantine Object
     include_once('AmavisQuarantine.php');
-    $this->quarantine = new AmavisQuarantine( $this->rcmail->config->get( 'amacube_db_dsn' ), 
-                                              $this->rcmail->config->get( 'amacube_amavis_host' ), 
-                                              $this->rcmail->config->get( 'amacube_amavis_port' ) );
+    $this->quarantine = new AmavisQuarantine( $this->rcmail->config->get( 'amacube_remix_db_dsn' ), 
+                                              $this->rcmail->config->get( 'amacube_remix_amavis_host' ), 
+                                              $this->rcmail->config->get( 'amacube_remix_amavis_port' ) );
     
     #Fetch List from Quarantine
     //$output['count'] = $this->quarantine->fetch_count();
@@ -155,9 +138,6 @@ class amacube_quarantine extends rcube_plugin
       $output['count'] = $results['count'];
       
       foreach( $results['items'] AS $item ) {
-        # Modify Values
-        $item['age'] = date( 'Y-m-d m:s', $item['age'] );
-        
         if( $item['content'] != 'S' )
           $item['level'] = '--';
         
@@ -165,15 +145,15 @@ class amacube_quarantine extends rcube_plugin
         $output['raw'] .= html::tag( 'tr', null,
                                      html::tag( 'td', array( 'class' => 'ac_from'), $item['sender'] ) .
                                      html::tag( 'td', array( 'class' => 'ac_subject'), $item['subject'] ) .
-                                     html::tag( 'td', array( 'class' => 'ac_date'), $item['age'] ) .
+                                     html::tag( 'td', array( 'class' => 'ac_date'), $item['age'] = date( 'Y-m-d - h:i a', $item['age'] ) ) .
                                      html::tag( 'td', array( 'class' => 'ac_type'), $item['content'] ) .
                                      html::tag( 'td', array( 'class' => 'ac_score'), $item['level'] ) .
                                      html::tag( 'td', array( 'class' => 'ac_action'),
                                                 html::tag( 'div', array( 'id' => $item['id'] ),
                                                            html::tag( 'a', array( 'href' => '#', 'onclick' => "rcmail.command('plugin.request_quarantine_release', this)"),
-                                                                      html::tag( 'img', array( 'alt' => 'Release', 'src' => 'plugins/amacube_quarantine/media/like.png', 'title' => 'Release' ) ) ) .
+                                                                      html::tag( 'img', array( 'alt' => 'Release', 'src' => 'plugins/amacube_remix_quarantine/media/like.png', 'title' => 'Release' ) ) ) .
                                                            html::tag( 'a', array( 'href' => '#', 'onclick' => "rcmail.command('plugin.request_quarantine_discard', this)"),
-                                                                      html::tag( 'img', array( 'alt' => 'Discard', 'src' => 'plugins/amacube_quarantine/media/waste.png', 'title' => 'Discard' ) ) )
+                                                                      html::tag( 'img', array( 'alt' => 'Discard', 'src' => 'plugins/amacube_remix_quarantine/media/waste.png', 'title' => 'Discard' ) ) )
                                                          )
                                               )
                                    );
@@ -204,9 +184,9 @@ class amacube_quarantine extends rcube_plugin
     
     # Initialize Quarantine Object
     include_once('AmavisQuarantine.php');
-    $this->quarantine = new AmavisQuarantine( $this->rcmail->config->get( 'amacube_db_dsn' ), 
-                                              $this->rcmail->config->get( 'amacube_amavis_host' ), 
-                                              $this->rcmail->config->get( 'amacube_amavis_port' ) );
+    $this->quarantine = new AmavisQuarantine( $this->rcmail->config->get( 'amacube_remix_db_dsn' ), 
+                                              $this->rcmail->config->get( 'amacube_remix_amavis_host' ), 
+                                              $this->rcmail->config->get( 'amacube_remix_amavis_port' ) );
     
     # Release Message
     $errors = $this->quarantine->release( $data['mail_id'] );
@@ -235,9 +215,9 @@ class amacube_quarantine extends rcube_plugin
     
     # Initialize Quarantine Object
     include_once('AmavisQuarantine.php');
-    $this->quarantine = new AmavisQuarantine( $this->rcmail->config->get( 'amacube_db_dsn' ), 
-                                              $this->rcmail->config->get( 'amacube_amavis_host' ), 
-                                              $this->rcmail->config->get( 'amacube_amavis_port' ) );
+    $this->quarantine = new AmavisQuarantine( $this->rcmail->config->get( 'amacube_remix_db_dsn' ), 
+                                              $this->rcmail->config->get( 'amacube_remix_amavis_host' ), 
+                                              $this->rcmail->config->get( 'amacube_remix_amavis_port' ) );
     
     # Discard Message
     $errors = $this->quarantine->delete( $data['mail_id'] );

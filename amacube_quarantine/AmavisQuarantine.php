@@ -1,41 +1,81 @@
  <?php
 /**
-* AmavisQuarantine - class to load, delete or release Amavis quarantined emails in/from DB
+* This file is part of the Amacube-Remix_Quarantine Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
+* 
+* A Roundcube plugin to let users release quarantined mail (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* 
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
 */
 
-/*
-This file is part of the amacube Roundcube plugin
-Copyright (C) 2013, Alexander Köb <nerdkram@koeb.me>
-
-Licensed under the GNU General Public License version 3.
-See the COPYING file for a full license statement.          
-
-*/
-include_once('AmavisAbstract.php');
-class AmavisQuarantine extends AmavisAbstract
+class AmavisQuarantine
 {
-
-  protected $user_email = '';
-
-  // DATABASE STUFF
-  private $db_config; // array with db configuration
-  protected $db_conn;   // db connection
-
-  // AMAVIS 
+  # Database Settings
+	private   $db_config;
+  protected $db_conn;
+  
+  # AM.PDP Settings
   private $amavis_host = '';
   private $amavis_port = '';
-
+  
+  # Bayesian Filter Training
+  private $bayes_train = false;
+  private $bayes_ham_pipe = '';
+  private $bayes_spam_pipe = '';
+  
+  # User Settings
+  protected $user_email = '';
+  
   // constructor
   function __construct( $db_config, $amavis_host, $amavis_port ) {
-    parent::__construct( $db_config );
+    $this->db_config = $db_config;
     
     $this->amavis_host = $amavis_host;
     $this->amavis_port = $amavis_port;
+    
+    $this->bayes_train = $bayes['train'];
+    $this->bayes_ham_pipe = $bayes['ham_pipe'];
+    $this->bayes_spam_pipe = $bayes['spam_pipe'];
+    
+    # Fetch Username
+    $rcmail = rcmail::get_instance();
+    $this->user_email = $rcmail->user->data['username'];
+  }
+  
+  function init_db() {
+    # Initialize Database Factory
+    if ( !$this->db_conn ) {
+      if ( !class_exists( 'rcube_db' ) ) // pre 0.9
+        $this->db_conn = new rcube_mdb2( $this->db_config, '', TRUE );
+      else // ver 0.9+
+        $this->db_conn = rcube_db::factory( $this->db_config, '', TRUE );
+    }
+    
+    # Connect to the Database
+    $this->db_conn->db_connect('w');
+
+    # Check DB connections and exit on failure
+    if ( $err_str = $this->db_conn->is_error() ) {
+      raise_error( array(
+        'code' => 603,
+        'type' => 'db',
+        'message' => $err_str ), true, true );
+    }
+  }
+
+  function db_error() {
+    # Return the last database error message
+    if( $this->db_conn && $this->db_conn->is_error() )
+      return $this->db_conn->is_error();
+      
+    return false;
   }
   
   function fetch_list( $criteria ) {
     // Debug: Remove before production
-    error_log( 'AMACUBE: Fetch quarantined items.' );
+    error_log( 'AMACUBE-REMIX: Fetch quarantined items.' );
     
     $errors = array();
     $items = array();
@@ -149,9 +189,9 @@ class AmavisQuarantine extends AmavisAbstract
     return $output;
   }
   
-  function delete( $mail_id ) {
+  function delete( $mail_id, $is_ham = false ) {
     // Debug: Remove before production
-    error_log( 'AMACUBE: delete mail with id: ' . $mail_id );
+    error_log( 'AMACUBE-REMIX: delete mail with id: ' . $mail_id );
     
     $errors = array();
     
@@ -173,6 +213,9 @@ class AmavisQuarantine extends AmavisAbstract
         $errors[] = "No Message with Mail Id '{$mail_id}' exists in the quarantine.\n";
       
       if( count( $errors ) == 0 ) {
+        # Train Bayes Before Deleting Message
+        $this->train_bayes( $mail_id, $is_ham );
+        
         # Build Queries - Delete records from 3 tables
         $queries = array();
         $queries[] = 'DELETE FROM `msgs` WHERE `mail_id` = ?';
@@ -191,7 +234,7 @@ class AmavisQuarantine extends AmavisAbstract
     
     if( count( $errors ) > 0 ) {
       foreach( $errors as $error )
-        error_log( 'AMACUBE: delete error: ' . $error );
+        error_log( 'AMACUBE-REMIX: delete error: ' . $error );
         
       return $errors;
     }
@@ -199,9 +242,32 @@ class AmavisQuarantine extends AmavisAbstract
     return false;
   }
   
+  function train_bayes( $mail_id, $is_ham ) {
+    if( $this->bayes_train ) {
+      $message = '';
+      
+      $query = 'SELECT `mail_id` FROM `quarantine` WHERE `mail_id` = ? ORDER BY `partition_tag` ASC';
+      $results = $this->db_conn->query( $query, $mail_id );
+      
+      while( $results && ( $result = $this->db_conn->fetch_assoc( $results ) ) )
+        $message .= $result;
+        
+      if( !empty( $message ) ) {
+        if( $is_ham )
+          // exec_command: $this->bayes_ham_pipe
+          error_log( 'AMACUBE-REMIX: train bayes (ham)' );
+        else
+          // exec_command: $this->bayes_spam_pipe
+          error_log( 'AMACUBE-REMIX: train bayes (spam)' );
+      }
+    }
+      
+    return;
+  }
+  
   function release( $mail_id ) {
     // Debug: Remove before production
-    error_log( 'AMACUBE: release mail with id: ' . $mail_id );
+    error_log( 'AMACUBE-REMIX: release mail with id: ' . $mail_id );
     
     $errors = array();
     $release_error_ids = array();
@@ -238,7 +304,7 @@ class AmavisQuarantine extends AmavisAbstract
           $commands[$result['mail_id']] = $command;
         }
         
-        error_log("AMACUBE: command array: " . implode( ',', str_replace( "\r\n", "_CR_NL_", $commands ) ) );
+        error_log("AMACUBE-REMIX: command array: " . implode( ',', str_replace( "\r\n", "_CR_NL_", $commands ) ) );
         
         // open socket to amavis process and send release commands:
         $fp = fsockopen( $this->amavis_host, $this->amavis_port, $errno, $errstr, 5 );
@@ -268,22 +334,22 @@ class AmavisQuarantine extends AmavisAbstract
               }
             } else {
               $errors[] = "Failed to write to socket\n";
-              error_log("AMACUBE: release: write to socket failed\n");
+              error_log("AMACUBE-REMIX: release: write to socket failed\n");
             }
             
-            error_log( "AMACUBE: amavis said: " . str_replace( "\r\n", "_CR_NL_", $answer ) );
+            error_log( "AMACUBE-REMIX: amavis said: " . str_replace( "\r\n", "_CR_NL_", $answer ) );
           }
           
           fclose( $fp );
         } else {
           $errors[] = "Failed to open socket: {$errstr} ({$errno})\n";
-          error_log("AMACUBE: socket open failed: $errstr ($errno)\n");
+          error_log("AMACUBE-REMIX: socket open failed: $errstr ($errno)\n");
         }
             
         // successfully released emails can be deleted
         foreach( $release_success_ids AS $released_id ) {
           # Discard Message
-          $results = $this->delete( $released_id );
+          $results = $this->delete( $released_id, true );
           
           # Display/Log Discard Errors
           if( is_array( $results ) )
@@ -294,13 +360,13 @@ class AmavisQuarantine extends AmavisAbstract
         if( count( $release_error_ids ) > 0) {
           foreach( $release_error_ids AS $mail_id ) {
             $errors[] = "After successful releasing, deletion of the message with Mail_Id '{$mail_id}' from the quarantine failed.";
-            error_log("AMACUBE: Sucessful release but failed deletion for Mail_Id '{$mail_id}'");
+            error_log("AMACUBE-REMIX: Sucessful release but failed deletion for Mail_Id '{$mail_id}'");
           }
         }
         
         if( count( $errors ) > 0 ) {
           foreach( $errors as $error )
-            error_log( 'AMACUBE: delete error: ' . $error );
+            error_log( 'AMACUBE-REMIX: delete error: ' . $error );
             
           return $errors;
         }

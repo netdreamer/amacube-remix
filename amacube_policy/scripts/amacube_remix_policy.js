@@ -1,14 +1,17 @@
-/*
-This file is part of the amacube Roundcube plugin
-Copyright (C) 2013, Alexander Köb
-
-Licensed under the GNU General Public License version 3. 
-See the COPYING file for a full license statement.          
-
+/**
+* This file is part of the Amacube-Remix_Policy Roundcube plugin
+* Copyright (C) 2015, Tony VanGerpen <Tony.VanGerpen@hotmail.com>
+* 
+* A Roundcube plugin to let users change their amavis policy settings (which must be stored in a database)
+* Based heavily on the amacube plugin by Alexander Köb (https://github.com/akoeb/amacube)
+* 
+* Licensed under the GNU General Public License version 3. 
+* See the COPYING file in parent directory for a full license statement.
 */
+
 if (window.rcmail) {
   rcmail.addEventListener('init', function(evt) {
-    rcmail.register_command('plugin.amacube_policy-save', function() { rcmail.gui_objects.amacube_policy_form.submit(); }, true);
+    rcmail.register_command('plugin.amacube_remix_policy', function() { rcmail.gui_objects.amacube_remix_policy_form.submit(); }, true);
   });
   
   /* Spam Range Slider */
@@ -16,18 +19,18 @@ if (window.rcmail) {
     $( "#spam_slider" ).slider({
       range: true,
       step: 0.1,
-      min: 0,
-      max: 20,
+      min: -10,
+      max: 23,
       values: [ $( "#spam_settings_junk_score" ).val(), $( "#spam_settings_quarantine_score" ).val() ],
       slide: function( event, ui ) {
         $( "#spam_settings_junk_score" ).val( ui.values[ 0 ] );
         $( "#spam_settings_quarantine_score" ).val( ui.values[ 1 ] );
         $( "#spam_settings_junk_score_display" ).text( ui.values[ 0 ] );
         $( "#spam_settings_quarantine_score_display" ).text( ui.values[ 1 ] );
-        $( "#slider_upper_range").css('width', 100 - ( ui.values[1] * 5 ) +'%');
+        $( "#spam_slider_upper_range").css('width', 100 - ( ( ui.values[1] + 10 ) * 3 ) +'%');
       }
-    }).append( '<div id="spam_slider_upper_range" style="width: ' + ( 100 - ( $( "#spam_slider" ).slider( 'option', 'values' )[1] * 5 ) ) + '%"></div>' );
-    
+    }).append( '<div id="spam_slider_upper_range" style="width: ' + ( 100 -( parseInt( $( "#spam_slider" ).slider( 'option', 'values' )[1] ) + 10 ) * 3 ) + '%"></div>' );
+ 
     /* Set Hidden Form Fields to Policy Default Values */
     $( "#spam_settings_junk_score" ).val( $( "#spam_slider" ).slider( "values", 0 ) );
     $( "#spam_settings_quarantine_score" ).val( $( "#spam_slider" ).slider( "values", 1 ) );
