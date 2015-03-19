@@ -140,7 +140,7 @@ if( window.rcmail ) {
 	/* Request Handlers */
 	function request_initialize() {
 		set_loading_state();
-		rcmail.http_post( 'plugin.request_ajax', { action: 'show_quarantine', settings: settings } );
+		rcmail.http_post( 'request_ajax', { action: 'show_quarantine', settings: settings } );
 	}
 	
 	function request_pagination( sender ) {
@@ -168,7 +168,7 @@ if( window.rcmail ) {
 		}
 		
 		set_loading_state();
-		rcmail.http_post( 'plugin.request_ajax', { action: 'show_quarantine', settings: settings } );
+		rcmail.http_post( 'request_ajax', { action: 'show_quarantine', settings: settings } );
 	}
 	
 	function request_search() {
@@ -176,7 +176,7 @@ if( window.rcmail ) {
 		settings['search_term'] = $( 'form[name=rcmqsearchform] input#quicksearchbox' ).val();
 		
 		set_loading_state();
-		rcmail.http_post( 'plugin.request_ajax', { action: 'show_quarantine', settings: settings } );
+		rcmail.http_post( 'request_ajax', { action: 'show_quarantine', settings: settings } );
 	}
 	
 	function request_search_filter( sender ) {
@@ -199,7 +199,7 @@ if( window.rcmail ) {
 		settings['search_term'] = '';
 		
 		set_loading_state();
-		rcmail.http_post( 'plugin.request_ajax', { action: 'show_quarantine', settings: settings } );
+		rcmail.http_post( 'request_ajax', { action: 'show_quarantine', settings: settings } );
 	}
 	
 	function request_sort_by( sender ) {
@@ -259,7 +259,7 @@ if( window.rcmail ) {
 		}
 		
 		set_loading_state();
-		rcmail.http_post( 'plugin.request_ajax', { action: 'show_quarantine', settings: settings } );
+		rcmail.http_post( 'request_ajax', { action: 'show_quarantine', settings: settings } );
 	}
 	
 	function request_quarantine_release( sender ) {
@@ -269,7 +269,7 @@ if( window.rcmail ) {
 			value = $(sender).parent().attr( 'id' );
 			
 		set_loading_state();
-		rcmail.http_post( 'plugin.request_ajax', { action: 'quarantine_release', settings: settings, mail_id: value } );
+		rcmail.http_post( 'request_ajax', { action: 'quarantine_release', settings: settings, mail_id: value } );
 	}
 	
 	function request_quarantine_discard( sender ) {
@@ -279,12 +279,12 @@ if( window.rcmail ) {
 			value = $(sender).parent().attr( 'id' );
 			
 		set_loading_state();
-		rcmail.http_post( 'plugin.request_ajax', { action: 'quarantine_discard', settings: settings, mail_id: value } );
+		rcmail.http_post( 'request_ajax', { action: 'quarantine_discard', settings: settings, mail_id: value } );
 	}
 
 	/* Response Handlers */
 	function response_refresh() {
-		rcmail.http_post( 'plugin.request_ajax', { action: 'show_quarantine', settings: settings } );
+		rcmail.http_post( 'request_ajax', { action: 'show_quarantine', settings: settings } );
 	}
 	
 	function response_messagelist( response ) {

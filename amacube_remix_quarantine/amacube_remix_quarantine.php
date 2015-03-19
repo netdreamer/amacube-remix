@@ -32,7 +32,7 @@ class amacube_remix_quarantine extends rcube_plugin
     if( $this->rcmail->task == 'quarantine' ) {
       $this->register_action( 'index', array( $this, 'event_init' ) );
       $this->register_action( 'refresh', array( $this, 'event_refresh' ) );
-      $this->register_action( 'plugin.request_ajax', array( $this, 'request_handler' ) );
+      $this->register_action( 'request_ajax', array( $this, 'request_handler' ) );
       
       $this->add_hook( 'startup', array( $this, 'startup' ) );
     }
