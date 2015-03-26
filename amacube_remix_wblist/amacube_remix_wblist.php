@@ -98,7 +98,6 @@ class amacube_remix_wblist extends rcube_plugin
     
     # Get POST Vars
     $data['address'] = ( isset( $_POST['address'] ) ) ? $_POST['address'] : '';
-    $data['priority'] = ( isset( $_POST['priority'] ) ) ? $_POST['priority'] : '';
     $data['policy'] = ( isset( $_POST['policy'] ) ) ? $_POST['policy'] : '';
     
     # Validate Address
@@ -125,10 +124,10 @@ class amacube_remix_wblist extends rcube_plugin
                                       $this->rcmail->config->get( 'amacube_remix_amavis_host' ), 
                                       $this->rcmail->config->get( 'amacube_remix_amavis_port' ) );
     
-    # Delete WBlist Entry
-    $errors = $this->wblist->add( $data['address'], $data['priority'], $data['policy'] );
+    # Add WBlist Entry
+    $errors = $this->wblist->add( $data['address'], $data['policy'] );
     
-    # Display/Log Delete Errors
+    # Display/Log Add Errors
     if( is_array( $errors ) ) {
       foreach( $errors AS $error )
         $this->rcmail->output->command( 'display_message', $error, 'error' );
@@ -192,7 +191,6 @@ class amacube_remix_wblist extends rcube_plugin
     # Validate POST Vars
     switch( $criteria['sort_by'] ) {
       case 'policy':
-      case 'priority':
       case 'sender':
         // Do Nothing, Column name is valid
         break;
@@ -217,7 +215,6 @@ class amacube_remix_wblist extends rcube_plugin
         foreach( $results['items'] AS $item ) {
           # Build Results Tbody
           $output['raw'] .= html::tag( 'tr', null,
-                                       html::tag( 'td', array( 'class' => 'ac_priority' ), $item['priority'] ) .
                                        html::tag( 'td', array( 'class' => 'ac_sender' ), $item['email'] ) .
                                        html::tag( 'td', array( 'class' => 'ac_policy' ), ( $item['wb'] == 'W' ) ? 'Whitelist' : 'Blacklist'  ) .
                                        html::tag( 'td', array( 'class' => 'ac_action' ),

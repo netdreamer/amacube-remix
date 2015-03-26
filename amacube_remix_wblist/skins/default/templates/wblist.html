@@ -24,9 +24,6 @@
 					<thead>
 						<tr>
 							<td>
-								Priority
-							</td>
-							<td>
 								Sender / Domain
 							</td>
 							<td>
@@ -36,9 +33,6 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>
-								<input name="_wblist_priority" type="text">
-							</td>
 							<td>
 								<input name="_wblist_address" type="text">
 							</td>
@@ -57,10 +51,18 @@
 			</p>
 		</form>
 		<div class="wblist_instruction" >
-			<p>You may define rules that will accept or reject email from certain senders or domain.  These rules are evaluted in order based on priority, and then by most specific match.  Once a Rule is matched, no further rules are evaluated.  It is important to consider the order of evaluation when creating rules.</p>
+			<p>You may define rules that will accept or reject email from certain senders or domain.  These rules are evaluted by most specific match.  Once a Rule is matched, no further rules are evaluated.  It is important to consider the order of evaluation when creating rules.</p>
 			<p>Example: Deny all email from example.org except for email sent by Bob (2 rules):<br />
-			(Rule 1) Priority: 7, Sender: @example.org, Policy: Blacklist<br />
-			(Rule 2) Priority: 8, Sender: Bob@example.org, Policy: Whitelist</p>
+			(Rule 1) Sender: Bob@example.org, Policy: Whitelist<br />
+			(Rule 2) Sender: @example.org, Policy: Blacklist</p>
+			<p>Order of Evaluation:<br />
+				user@sub.example.org<br />
+				user<br />
+				@sub.example.org<br />
+				@example.org<br />
+				@org<br />
+				@. (This is a catchall, meaning it matches everything)</p>
+			</p>
 		</div>
 	</div>
 	
@@ -71,11 +73,8 @@
 					<table class="records-table messagelist sortheader fixedheader fixedcopy" style="position: fixed;">
 						<thead>
 							<tr>
-								<td class="ac_priority">
-									<a class="ac_sort_desc" href="#" id="sort_by_priority" onclick="rcmail.command('plugin.request_sort_by', this);" >Priority</a>
-								</td>
 								<td class="ac_sender">
-									<a class="ac_sort_none" href="#" id="sort_by_sender" onclick="rcmail.command('plugin.request_sort_by', this);" >Sender / Domain</a>
+									<a class="ac_sort_asc" href="#" id="sort_by_sender" onclick="rcmail.command('plugin.request_sort_by', this);" >Sender / Domain</a>
 								</td>
 								<td class="ac_policy">
 									<a class="ac_sort_none" href="#" id="sort_by_policy" onclick="rcmail.command('plugin.request_sort_by', this);" >Policy</a>
@@ -89,9 +88,6 @@
 					<table class="records-table messagelist sortheader fixedheader" id="messagelist">
 						<thead>
 							<tr>
-								<td class="ac_priority">
-									<a class="ac_sort_none" href="#">Priority</a>
-								</td>
 								<td class="ac_sender">
 									<a class="ac_sort_none" href="#">Sender / Domain</a>
 								</td>

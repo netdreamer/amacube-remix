@@ -9,8 +9,8 @@
 * See the COPYING file in parent directory for a full license statement.
 */
 
-var settings = { sort_by: 'priority',
-								 sort_order: 'DESC',
+var settings = { sort_by: 'sender',
+								 sort_order: 'ASC',
 							 };
 						
 $( document ).ready(function() {
@@ -76,12 +76,11 @@ function request_initialize() {
 }
 
 function request_add_entry() {
-	var wblist_priority = $( 'form#amacube_remix_wblist_form input[name=_wblist_priority]' ).val();
 	var wblist_policy = $( 'form#amacube_remix_wblist_form select[name=_wblist_policy] option:selected' ).val();
 	var wblist_address = $( 'form#amacube_remix_wblist_form input[name=_wblist_address]' ).val();
 	
 	set_wblist_loading_state();
-	rcmail.http_post( 'plugin.request_ajax', { action: 'add_entry', settings: settings, address: wblist_address, priority: wblist_priority, policy: wblist_policy } );
+	rcmail.http_post( 'plugin.request_ajax', { action: 'add_entry', settings: settings, address: wblist_address, policy: wblist_policy } );
 }
 
 function request_delete_entry( sender ) {
@@ -101,16 +100,6 @@ function request_sort_by( sender ) {
 				settings['sort_order'] = ( settings['sort_order'] == 'ASC' ) ? 'DESC' : 'ASC';
 			} else {
 				settings['sort_by'] = 'policy';
-				settings['sort_order'] = 'ASC';
-			}
-			
-			update_sort_arrows( sender, settings['sort_order'] );
-			break;
-		case 'sort_by_priority':
-			if( settings['sort_by'] == 'priority' ) {
-				settings['sort_order'] = ( settings['sort_order'] == 'ASC' ) ? 'DESC' : 'ASC';
-			} else {
-				settings['sort_by'] = 'priority';
 				settings['sort_order'] = 'ASC';
 			}
 			
@@ -140,7 +129,6 @@ function response_wblist( response ) {
 		set_wblist_loaded_state( response.raw );
 		
 		// Reset Form Fields
-		$( 'form#amacube_remix_wblist_form input[name=_wblist_priority]' ).val( '' );
 		$( 'form#amacube_remix_wblist_form input[name=_wblist_address]' ).val( '' );
 		$( 'form#amacube_remix_wblist_form select[name=_wblist_policy] option:selected' ).removeAttr( 'selected' );
 	}

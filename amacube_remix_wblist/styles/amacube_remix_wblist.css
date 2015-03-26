@@ -9,6 +9,9 @@
 * See the COPYING file in parent directory for a full license statement.
 */
 
+input[name="_wblist_address"] { width: 360px; }
+select[name="_wblist_policy"] { width: 100px; }
+
 div#pluginbody div.wblist_form { float: left; overflow: hidden; min-width: 504px; width: 40%; }
 div#pluginbody div.wblist_list { float: left; overflow: hidden; width: 60%; }
 
@@ -17,10 +20,8 @@ div#pluginbody div.uibox { margin: 34px 12px 0px 12px; }
 div.uibox.amacube { position: relative; top: 0; bottom: 0; min-height: 200px;}
 
 div.amacube table { width: 100%; }
-div.amacube table thead tr td.ac_priority { padding-left: 0px; text-align: left; }
-div.amacube table td.ac_priority { text-align: center; width: 50px; }
-div.amacube table td.ac_sender { width: 200px; }
-div.amacube table td.ac_policy { width: 100px; }
+div.amacube table td.ac_sender { width: 380px; }
+div.amacube table td.ac_policy { width: 120px; }
 div.amacube table td.ac_action { width: 30px; }
 div.amacube table td.ac_action img { cursor: pointer; height: 20px; padding: 0px 6px; width: 20px; }
 
