@@ -1,0 +1,116 @@
+<roundcube:object name="doctype" value="html5" />
+<html>
+<head>
+<title><roundcube:object name="pagetitle" /></title>
+<roundcube:include file="/includes/links.html" />
+</head>
+<body class="noscroll">
+
+<roundcube:include file="/includes/header.html" />
+
+<div id="mainscreen" class="offset">
+
+<roundcube:if condition="env:task == 'settings'" />
+	<roundcube:include file="/includes/settingstabs.html" />
+<roundcube:endif />
+
+<div id="pluginbody" class="uibox contentbox">
+	<roundcube:object name="plugin.body" />
+	<div class="wblist_form">
+		<form class="propform boxcontent" id="amacube_remix_wblist_form" name="amacube_remix_wblist_form" method="post" action="#">
+			<fieldset>
+				<legend>Add Entry</legend>
+				<table class="propform" cols="2">
+					<thead>
+						<tr>
+							<td>
+								Sender / Domain
+							</td>
+							<td>
+								Policy
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<input name="_wblist_address" type="text">
+							</td>
+							<td>
+								<select name="_wblist_policy">
+									<option value="W">Whitelist</option>
+									<option value="B">Blacklist</option>
+								</select>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</fieldset>
+			<p>
+				<input type="button" class="button mainaction" id="rcmbtn117" onclick="return rcmail.command('plugin.request_add_entry','',this,event)" value="Save">
+			</p>
+		</form>
+		<div class="wblist_instruction" >
+			<p>You may define rules that will accept or reject email from certain senders or domain.  These rules are evaluted by most specific match.  Once a Rule is matched, no further rules are evaluated.  It is important to consider the order of evaluation when creating rules.</p>
+			<p>Example: Deny all email from example.org except for email sent by Bob (2 rules):<br />
+			(Rule 1) Sender: Bob@example.org, Policy: Whitelist<br />
+			(Rule 2) Sender: @example.org, Policy: Blacklist</p>
+			<p>Order of Evaluation:<br />
+				user@sub.example.org<br />
+				user<br />
+				@sub.example.org<br />
+				@example.org<br />
+				@org<br />
+				@. (This is a catchall, meaning it matches everything)</p>
+			</p>
+		</div>
+	</div>
+	
+	<div class="wblist_list">
+		<div class="uibox amacube" id="mailview-top">
+			<div class="boxlistcontent" id="messagelistcontainer">
+				<div id="messagelist" class="loading"><style>table.messagelist { margin:0 !important }</style>
+					 <table class="records-table messagelist sortheader fixedheader fixedcopy" id="messagehead" style="position: fixed;">
+                                                <thead>
+                                                        <tr>
+                                                                <td class="ac_sender">
+                                                                        <a class="ac_sort_asc" href="#" id="sort_by_sender" onclick="rcmail.command('plugin.request_sort_by', this);" >Sender / Domain</a>
+                                                                </td>
+                                                                <td class="ac_policy">
+                                                                        <a class="ac_sort_none" href="#" id="sort_by_policy" onclick="rcmail.command('plugin.request_sort_by', this);" >Policy</a>
+                                                                </td>
+                                                                <td class="ac_action">&nbsp;</td>
+                                                        </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                        </table>
+                                        <table class="records-table messagelist sortheader fixedheader" id="messagelist">
+                                                <thead>
+                                                        <tr>
+                                                                <td class="ac_sender">
+                                                                        <a class="ac_sort_asc" href="#" id="sort_by_sender" onclick="rcmail.command('plugin.request_sort_by', this);" >Sender / Domain</a>
+                                                                </td>
+                                                                <td class="ac_policy">
+                                                                        <a class="ac_sort_none" href="#" id="sort_by_policy" onclick="rcmail.command('plugin.request_sort_by', this);" >Policy</a>
+                                                                </td>
+                                                                <td class="ac_action">&nbsp;</td>
+                                                        </tr>
+                                                </thead>
+                                                <tbody>
+                                                        <roundcube:object name="plugin.body.list" />
+                                                </tbody>
+                                        </table>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<roundcube:object name="plugin.footer" />
+
+<roundcube:include file="/includes/footer.html" />
+
+</body>
+</html>

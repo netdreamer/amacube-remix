@@ -23,8 +23,7 @@ class amacube_remix_quarantine extends rcube_plugin
     $this->register_task( 'quarantine' );
     
     # Register Quarantine Langauge Files
-    $this->add_texts( 'localization/', true );
-    
+    $this->add_texts( 'localization', true );
     # Add Quarantine Icon to the Taskbar
     $this->register_icon();
     
@@ -43,14 +42,24 @@ class amacube_remix_quarantine extends rcube_plugin
     $this->include_stylesheet( 'styles/amacube_remix_quarantine.icon.css' );
     
     # Add Quarantine Icon to the Taskbar
-    $this->add_button( array(
-      'command'    => 'quarantine',
-      'class'      => 'button-quarantine',
-      'classsel'   => 'button-quarantine button-selected',
-      'innerclass' => 'button-inner',
-      'label'      => 'quarantine',
-      'domain'     => 'amacube_remix_quarantine'
-    ), 'taskbar' );
+    $this->add_button(array(
+			'type'       => 'link',
+			'label'      => 'amacube_remix_quarantine.quarantine',
+			'command'       => 'quarantine',
+			'class'      => 'button-quarantine',
+			'classsel'   => 'button-quarantine button-selected',
+			'innerclass' => 'button-inner'
+		), 'taskbar');
+//      var button = $('<A>').attr('id', 'rcmSampleButton').html(rcmail.gettext('buttontitle', 'sampleplugin'));
+//      button.bind('click', function(e){ return rcmail.command('plugin.samplecmd', this); });
+
+//      rcmail.add_element(button, 'toolbar');
+
+/*     $this->add_button(array(
+                'command'  => 'quarantine',
+                'label'    => 'amacube_remix_quarantine.quarantine',
+            ), 'taskbar');
+*/
   }
   
   function startup() {

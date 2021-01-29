@@ -14,37 +14,42 @@ class amacube_remix_wblist extends rcube_plugin
 {
   private $rcmail;
   private $wblist;
-  
+
+  public $noframe = true;
+
+  private $newuser = false;
+  private $drivers = array();
+
   public $task = 'settings';
   public $actions = array( 'plugin.amacube_remix_wblist' => 'action_wblist',
                            'plugin.amacube_remix_wblist-save' => 'action_wblist_save',
                            'plugin.request_ajax' => 'request_handler' );
-  
+
   function init() {
     # Fetch Instance (Once)
     $this->rcmail = rcmail::get_instance();
-    
+
     # Register Policy Langauge Files
-    $this->add_texts( 'localization/', true );
-    
+    $this->add_texts( 'localization/' );
+
     # Add "Amavis WBlist" Icon to the Menu
     $this->add_hook( 'settings_actions', array( $this, 'settings_actions' ) );
-    
+
     # Only Register Actions if we have chosen "Settings" from the Taskbar
     if( $this->rcmail->task == 'settings' ) {
       foreach( $this->actions AS $key => $value)
         $this->register_action( $key, array( $this, $value ) );
-      
+
       # Only Startup if we have chosen "Amavis WBlist" from the Settings Menu
       if( array_key_exists( $this->rcmail->action, $this->actions ) )
         $this->add_hook( 'startup', array( $this, 'startup' ) );
     }
   }
-  
+
   function settings_actions( $args ) {
     # Load Icon Stylesheet
     $this->include_stylesheet( 'styles/amacube_remix_wblist.icon.css' );
-    
+
     # Add Amavis WBlist Icon to the Settings Menu
     $args['actions'][] = array( 'action' => 'plugin.amacube_remix_wblist',
                                 'class' => 'amacube_remix_wblist',
@@ -86,8 +91,8 @@ class amacube_remix_wblist extends rcube_plugin
    */
   function action_wblist() {
     $this->register_handler( 'plugin.body', array( $this, '_build_boxtitle' ) );
-    //$this->register_handler( 'plugin.body.form', array( $this, '_build_wblist_form' ) );
-    //$this->register_handler( 'plugin.body.list', array( $this, '_build_wblist_list' ) );
+//    $this->register_handler( 'plugin.body.form', array( $this, '_build_wblist_form' ) );
+//    $this->register_handler( 'plugin.body.list', array( $this, '_build_wblist_list' ) );
     $this->rcmail->output->set_pagetitle( $this->gettext( 'page_title' ) );
     $this->rcmail->output->send( 'amacube_remix_wblist.wblist' ); // Template to Send
   }
