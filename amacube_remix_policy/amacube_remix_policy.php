@@ -260,7 +260,6 @@ class amacube_remix_policy extends rcube_plugin
     # Validate Spam Levels
     $error = false;
 
-print_r($data);    
     if( !is_numeric( $data['spam_junk_score'] )
         || $data['spam_junk_score'] > $this->spam_score_max
         || $data['spam_junk_score'] < $this->spam_score_min

@@ -50,16 +50,6 @@ class amacube_remix_quarantine extends rcube_plugin
 			'classsel'   => 'button-quarantine button-selected',
 			'innerclass' => 'button-inner'
 		), 'taskbar');
-//      var button = $('<A>').attr('id', 'rcmSampleButton').html(rcmail.gettext('buttontitle', 'sampleplugin'));
-//      button.bind('click', function(e){ return rcmail.command('plugin.samplecmd', this); });
-
-//      rcmail.add_element(button, 'toolbar');
-
-/*     $this->add_button(array(
-                'command'  => 'quarantine',
-                'label'    => 'amacube_remix_quarantine.quarantine',
-            ), 'taskbar');
-*/
   }
   
   function startup() {
